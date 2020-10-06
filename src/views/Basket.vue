@@ -1,44 +1,11 @@
 <template>
   <div class="basket-page">
-   В вашей корзине {{productsInBasket.length}} товара(ов)
-   <v-container class="grey lighten-5">
-    <v-row v-if="productsInBasket.length"
-    >
+   В вашей корзине {{countProductsInProducts}} товара(ов)
+   <v-container class="lighten-5" v-if="countProductsInProducts">
+    <v-row>
       <v-col
-      v-for="(product,index) in productsInBasket"
-      :key="index" cols="12"
-      md="3"
-      >
-        <v-card
-        class="mx-auto">
-        <v-img
-        :src="product.image | makePath"
-        height="200px"
-        ></v-img>
-
-        <v-card-title>
-        {{ product.title }}
-        </v-card-title>
-      <v-card-text>
-      <v-chip-group
-        active-class="deep-purple accent-4 white--text"
-        column
-      >
-        <v-chip> Brand {{ product.brand }}</v-chip>
-
-        <v-chip> {{ product.regular_price.value }} {{ product.regular_price.currency }} </v-chip>
-</v-chip-group>
-    </v-card-text>
-
-        <v-card-actions>
-          <v-btn @click="addToBasket(product)"
-          color="orange"
-          text
-          >
-          Explore
-      </v-btn>
-        </v-card-actions>
-        </v-card>
+      v-for="(product,index) in productsInBasket" :key="index" cols="12"  md="3">
+        <product :product="product" :isBasket="false"></product>
       </v-col>
     </v-row>
   </v-container>
@@ -46,17 +13,29 @@
 </template>
 
 <script>
+import {groupBy} from 'lodash'
+import Product from '@/components/Product'
+
 export default {
- computed: {
-   productsInBasket () {
-    console.log(this.$store.getters.getProductsInBasket)
-      return this.$store.getters.getProductsInBasket
+  components: {
+    Product
+  },
+  computed: {
+    countProductsInProducts () {
+      return this.$store.getters.getProductsInBasket.length
+    },
+    productsInBasket () {
+      let basketProducts = groupBy(this.$store.getters.getProductsInBasket, 'id')
+      let arr = []
+      for (var a in basketProducts) {
+        basketProducts[a][0].count = basketProducts[a].length
+        arr.push(basketProducts[a][0])
+      }
+      return arr
     }
- },
-  filters: {
-    makePath: function (value) {
-      return require('../assets' + value)
-    }
+  },
+  created () {
+    this.$emit('showSideBar', false)
   }
 }
 </script>
@@ -65,5 +44,4 @@ export default {
   .basket-page {
      padding-top: 30px
   }
-  
 </style>

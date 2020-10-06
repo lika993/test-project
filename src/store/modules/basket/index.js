@@ -1,8 +1,5 @@
-import { _groupBy} from 'lodash'
-
 const state = {
   productsInBasket: [
-
   ]
 }
 
@@ -14,7 +11,6 @@ const getters = {
 }
 
 const actions = {
-  
 }
 
 const mutations = {

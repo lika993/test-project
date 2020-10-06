@@ -7,9 +7,9 @@ import vuetify from './plugins/vuetify'
 import store from './store'
 
 Vue.config.productionTip = false
-// Vue.filter('makePath', function (value) {
-//   return require('../assets' + value)
-// })
+Vue.filter('makePath', function (value) {
+  return require('./assets' + value)
+})
 
 /* eslint-disable no-new */
 new Vue({

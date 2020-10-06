@@ -69,18 +69,26 @@ module.exports = {
         }
       },
       {
-        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        test: /\.(woff|woff2)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+          name: utils.assetsPath('[name].[hash:7].[ext]')
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'file-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('[name].[hash:7].[ext]')
         }
       },
       {
         test: /\.s(c|a)ss$/,
         use: [
           'vue-style-loader',
-          'css-loader',
+          'css-loader', 'resolve-url-loader',
           {
             loader: 'sass-loader',
             // Requires sass-loader@^7.0.0

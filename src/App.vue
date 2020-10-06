@@ -1,43 +1,35 @@
 <template>
   <div id="app">
-    <header class="header header-flex">
-      <a href="/" class="logo"><img src="./assets/images/logo.png" alt=""></a>
-      <div class="content">
-        <v-container>
-          <div class="content-flex">
-               <span>
-     <router-link to="/basket"> count: {{productsInBasket.length}}</router-link>
-    </span>
-          </div>
-        </v-container>
-      </div>
-    </header>
-    <MainLayout @filtered='test'>
+    <MainPageLayout @filtered='test' :isNavbar="true" @showSideBar="show">
         <template v-slot:content>
           <router-view :id="id"></router-view>
         </template>
-    </MainLayout>
+    </MainPageLayout>
   </div>
 </template>
 
 <script>
-import MainLayout from './components/layouts/MainLayout'
+import MainPageLayout from './components/layouts/MainPageLayout'
 export default {
   name: 'App',
   data () {
-   return {
+    return {
       id: null
-   }
+    }
   },
   components: {
-    MainLayout
+    MainPageLayout
   },
   computed: {
     productsInBasket () {
-      return this.$store.getters.getProductsInBasket
+      let basketProducts = this.$store.getters.getProductsInBasket
+      return basketProducts
     }
   },
   methods: {
+    show () {
+      console.log('this', this)
+    },
     test (payload) {
       this.id = payload
     }
@@ -46,8 +38,16 @@ export default {
 </script>
 
 <style>
+@font-face {
+font-family: 'Proxima Nova';
+src: url('./assets/fonts/ProximaNova-RegularIt.eot'),
+  url('./assets/fonts/ProximaNova-RegularIt.eot?#iefix') format('embedded-opentype'),
+  url('./assets/fonts/ProximaNova-Regular.ttf') format('truetype');
+font-weight: normal;
+font-style: normal;
+}
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Proxima Nova';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -57,8 +57,6 @@ export default {
   padding-top: 0;
 }
 .header {
-  height: 120px;
-  border-bottom: #dadada 1px solid;
   position: relative;
 }
 .header-flex {
